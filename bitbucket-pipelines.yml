@@ -1,0 +1,18 @@
+pipelines:
+  default:
+    - step:
+        name: Deploy Nginx Configuration
+        image: atlassian/default-image:2
+        script:
+          # Install SSH client
+          - apt-get update && apt-get install -y openssh-client
+
+          # Add the private key to the SSH agent
+          - mkdir -p ~/.ssh
+          - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          - chmod 600 ~/.ssh/id_rsa
+          - ssh-keyscan -H your-server-ip >> ~/.ssh/known_hosts
+
+          # Run the deployment script on the server
+          - scp deploy.sh user@your-server-ip:/tmp/deploy.sh
+          - ssh user@your-server-ip "chmod +x /tmp/deploy.sh && /tmp/deploy.sh"
