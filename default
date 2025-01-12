@@ -44,11 +44,16 @@ server {
 	index index.html index.htm index.nginx-debian.html;
 
 	server_name _;
-
-    location /help/ {
+        location /help/ {
                proxy_pass https://cashfree.myfaqprime.com/;
            }
-    location /blog/robots.txt {
+        #location /blog {
+        #       proxy_pass https://www.cashfree.com/;
+        #   }
+        #location /blog/ {
+        #       proxy_pass https://www.cashfree.com/;
+        #   }
+        location /blog/robots.txt {
                #proxy_pass_request_headers      on;
                #proxy_pass https://blogrevamp.cashfree.com/;
                #proxy_set_header                USER_CUSTOMER              CASHFREE;
@@ -56,8 +61,35 @@ server {
                #proxy_set_header XHost "wp-master-test.cashfree.com";
                #root /var/www/html/robots.txt ;
                #add_header  X-Blog  "Raj_Need_This";
-            }
-    location /blog/ {
+            }  
+        #location /blog {
+               #rewrite ^/blog?$  https://blog.cashfree.com/vendor-payment/ ;
+               #rewrite ^/blog?$  https://gamma.cashfree.com/logs/ ;
+               #proxy_pass https://wp-master-test.cashfree.com/;
+               #proxy_set_header Host "wp-master-test.cashfree.com";
+               #proxy_pass_request_headers      on;
+         #      add_header  X-Blog  "Raj_Need_This";
+               #proxy_pass_request_headers on;
+               #proxy_set_header Host $host;
+	 #      proxy_pass https://blogrevamp.cashfree.com/;
+               #return 301 https://blogrevamp.cashfree.com$request_uri;
+	       #proxy_set_header                USER_CUSTOMER              CASHFREE;
+               #proxy_set_header XHost "grafana-master.cashfree.com";
+         #}  
+        #location /blog/vendor-payment/ {
+               #proxy_pass_request_headers on;
+               #proxy_set_header Host "www.cashfree.com/blog/";
+               #proxy_pass_request_headers      on;
+        #       proxy_pass https://blogrevamp.cashfree.com/;
+               #return 301 https://blogrevamp.cashfree.com$request_uri;
+               #proxy_set_header                USER_CUSTOMER              CASHFREE;
+               #proxy_pass https://wp-master-test.cashfree.com/;
+               #proxy_set_header XHost "wp-master-test.cashfree.com";
+        #       add_header  X-Blog  "Raj_Need_This";
+        #       proxy_redirect https://blogrevamp.cashfree.com$request_uri https://www.cashfree.com$request_uri;
+        #       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        #    } 
+        location /blog/ {
                #proxy_pass_request_headers on;
                #proxy_set_header Host "www.cashfree.com/blog/";
 	       #proxy_pass_request_headers      on;
@@ -70,7 +102,7 @@ server {
                proxy_redirect off;
                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             }
-    location /grow/ {
+        location /grow/ {
                #proxy_pass_request_headers on;
                #proxy_set_header Host "www.cashfree.com/blog/";
                #proxy_pass_request_headers      on;
@@ -82,7 +114,20 @@ server {
                proxy_redirect off;
                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             }
-    location /cfblog/ {
+        location /docs {
+               proxy_pass https://cashfreepayments-d00050e9.mintlify.dev;
+        
+               # Set headers
+               proxy_set_header Host cashfreepayments-d00050e9.mintlify.dev;
+               #proxy_set_header X-Forwarded-Host www.cashfree.com;
+               proxy_set_header X-Forwarded-Proto https;
+
+              # Optional: Forward other headers from the client request
+               proxy_set_header X-Real-IP $remote_addr;
+               proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;            
+
+           }
+        location /cfblog/ {
                #proxy_pass_request_headers on;
                #proxy_set_header Host "www.cashfree.com/blog/";
                #proxy_pass_request_headers      on;
@@ -94,7 +139,7 @@ server {
                proxy_redirect off;
                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             }
-    location /testblog/ {
+        location /testblog/ {
                #proxy_pass https://cashfreepaymentsblog.wordpress.com/;
                #proxy_pass https://blogrevamp.cashfree.com/;
                proxy_pass https://blogcashfreecom.wpcomstaging.com;
@@ -102,21 +147,37 @@ server {
                proxy_redirect off;
                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             }
-
+        
 	location / {
 		# First attempt to serve request as file, then
 		# as directory, then fall back to displaying a 404.
 		try_files $uri $uri/ =404;
 	}
 
-}
+	# pass PHP scripts to FastCGI server
+	#
+	#location ~ \.php$ {
+	#	include snippets/fastcgi-php.conf;
+	#
+	#	# With php-fpm (or other unix sockets):
+	#	fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+	#	# With php-cgi (or other tcp sockets):
+	#	fastcgi_pass 127.0.0.1:9000;
+	#}
 
+	# deny access to .htaccess files, if Apache's document root
+	# concurs with nginx's one
+	#
+	#location ~ /\.ht {
+	#	deny all;
+	#}
+}
 
 server {
     listen 80;
     listen [::]:80;
 
-    server_name doc.cashfree.com;
+    server_name docs.cashfree.com;
 
     location / {
         # Proxy to Mintlify

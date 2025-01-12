@@ -29,6 +29,9 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# Log the path of the configuration file
+echo "Using Nginx configuration file at: $CLONE_DIR/$CONFIG_FILE"
+
 # Copy the updated configuration file to the Nginx directory
 echo "Copying the updated Nginx configuration file..."
 sudo cp "$CONFIG_FILE" "$REMOTE_PATH/default"
