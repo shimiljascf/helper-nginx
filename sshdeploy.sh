@@ -2,9 +2,9 @@
 
 # Define variables
 REMOTE_PATH="/etc/nginx/sites-enabled" # Path to Nginx config on the server
-CONFIG_FILE="nginx.config"      # Name of the Nginx config file (update as needed)
+CONFIG_FILE="nginx.config"      # Name of the Nginx config file
 REPO_URL="git@github.com:shimiljascf/helper-nginx.git" # Repository URL
-CLONE_DIR="helper-nginx" # Directory where the repository will be cloned
+CLONE_DIR="$(pwd)" # Directory where the repository is located
 
 # Check if the repository is already cloned
 if [ ! -d "$CLONE_DIR/.git" ]; then
@@ -15,26 +15,23 @@ if [ ! -d "$CLONE_DIR/.git" ]; then
         exit 1
     fi
 else
-    echo "Repository already cloned. Navigating to the repository directory..."
+    echo "Repository already exists. Pulling the latest changes..."
 fi
-
-# Navigate to the server directory where the repo is cloned
-cd "$CLONE_DIR" || { echo "Repository directory not found. Exiting."; exit 1; }
 
 # Pull the latest changes from the repository
 echo "Pulling the latest changes from the repository..."
-git pull origin main
+git -C "$CLONE_DIR" pull origin main
 if [ $? -ne 0 ]; then
     echo "Failed to pull changes from the repository. Exiting."
     exit 1
 fi
 
 # Log the path of the configuration file
-echo "Using Nginx configuration file at: $CONFIG_FILE"
+echo "Using Nginx configuration file at: $CLONE_DIR/$CONFIG_FILE"
 
 # Copy the updated configuration file to the Nginx directory
 echo "Copying the updated Nginx configuration file..."
-sudo cp "$CONFIG_FILE" "$REMOTE_PATH/default"
+sudo cp "$CLONE_DIR/$CONFIG_FILE" "$REMOTE_PATH/default"
 if [ $? -ne 0 ]; then
     echo "Failed to copy the configuration file. Exiting."
     exit 1
