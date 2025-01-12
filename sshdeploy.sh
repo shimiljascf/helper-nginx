@@ -2,7 +2,7 @@
 
 # Define variables
 REMOTE_PATH="/etc/nginx/sites-enabled" # Path to Nginx config on the server
-CONFIG_FILE="nginx.config"      # Name of the Nginx config file
+CONFIG_FILE="nginx.conf"      # Correct file name
 REPO_URL="git@github.com:shimiljascf/helper-nginx.git" # Repository URL
 CLONE_DIR="$(pwd)" # Directory where the repository is located
 
@@ -25,6 +25,10 @@ if [ $? -ne 0 ]; then
     echo "Failed to pull changes from the repository. Exiting."
     exit 1
 fi
+
+# Log the files in the repository
+echo "Listing all files in the repository:"
+ls -l "$CLONE_DIR"
 
 # Log the path of the configuration file
 echo "Using Nginx configuration file at: $CLONE_DIR/$CONFIG_FILE"
