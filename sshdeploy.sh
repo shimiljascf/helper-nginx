@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Define variables
-REMOTE_PATH="/etc/nginx/sites-enabled" # Path to Nginx config on the server
-CONFIG_FILE="nginx.conf"      # Correct file name
-REPO_URL="git@github.com:shimiljascf/helper-nginx.git" # Repository URL
-CLONE_DIR="$(pwd)" # Directory where the repository is located
+REMOTE_PATH="/etc/nginx/sites-enabled" 
+CONFIG_FILE="nginx.conf"      
+REPO_URL="git@github.com:shimiljascf/helper-nginx.git" 
+CLONE_DIR="$(pwd)" 
 
 # Check if the repository is already cloned
 if [ ! -d "$CLONE_DIR/.git" ]; then
