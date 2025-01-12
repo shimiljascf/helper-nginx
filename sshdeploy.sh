@@ -4,7 +4,7 @@
 REMOTE_PATH="/etc/nginx/sites-enabled" # Path to Nginx config on the server
 CONFIG_FILE="nginx.config"      # Name of the Nginx config file (update as needed)
 REPO_URL="git@github.com:shimiljascf/helper-nginx.git" # Repository URL
-CLONE_DIR="/root/helper-nginx" # Directory where the repository will be cloned
+CLONE_DIR="helper-nginx" # Directory where the repository will be cloned
 
 # Check if the repository is already cloned
 if [ ! -d "$CLONE_DIR/.git" ]; then
@@ -30,7 +30,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Log the path of the configuration file
-echo "Using Nginx configuration file at: $CLONE_DIR/$CONFIG_FILE"
+echo "Using Nginx configuration file at: $CONFIG_FILE"
 
 # Copy the updated configuration file to the Nginx directory
 echo "Copying the updated Nginx configuration file..."
