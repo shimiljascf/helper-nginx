@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Define variables
-REMOTE_PATH="/etc/nginx/sites-enabled" 
-CONFIG_FILE="nginx.conf"      
-REPO_URL="git@github.com:shimiljascf/helper-nginx.git" 
-CLONE_DIR="$(pwd)" 
+REMOTE_PATH="/etc/nginx/sites-enabled"
+CONFIG_FILE="nginx.conf"
+REPO_URL="git@github.com:shimiljascf/helper-nginx.git"
+CLONE_DIR="$(pwd)"
 
 # Check if the repository is already cloned
 if [ ! -d "$CLONE_DIR/.git" ]; then
@@ -15,7 +15,8 @@ if [ ! -d "$CLONE_DIR/.git" ]; then
         exit 1
     fi
 else
-    echo "Repository already exists. Pulling the latest changes..."
+    echo "Repository already exists. Resetting to the latest state..."
+    git -C "$CLONE_DIR" reset --hard HEAD
 fi
 
 # Pull the latest changes from the repository
@@ -51,12 +52,6 @@ fi
 
 # Reload Nginx to apply changes
 echo "Reloading Nginx to apply changes..."
-sudo systemctl reload nginx
-if [ $? -eq 0 ]; then
-    echo "Nginx configuration successfully applied!"
-else
-    echo "Failed to reload Nginx. Please check the logs for more information."
-    exit 1
-fi
+sudo systemctl reload nginx || { echo "Error: Failed to reload Nginx."; exit 1; }
 
-echo "Manual deployment script completed successfully."
+echo "Deployment completed successfully!"
