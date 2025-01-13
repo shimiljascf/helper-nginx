@@ -6,17 +6,10 @@ CONFIG_FILE="help-center-nginx/nginx.conf"
 REPO_URL="git@github.com:shimiljascf/helper-nginx.git"
 CLONE_DIR="$(pwd)"
 
-# Check if the repository is already cloned
+# Validate the current directory is a Git repository
 if [ ! -d "$CLONE_DIR/.git" ]; then
-    echo "Cloning the repository..."
-    git clone "$REPO_URL" "$CLONE_DIR"
-    if [ $? -ne 0 ]; then
-        echo "Failed to clone the repository. Exiting."
-        exit 1
-    fi
-else
-    echo "Repository already exists. Resetting to the latest state..."
-    git -C "$CLONE_DIR" reset --hard HEAD
+    echo "Error: Current directory is not a Git repository. Exiting."
+    exit 1
 fi
 
 # Pull the latest changes from the repository
