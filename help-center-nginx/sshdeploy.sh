@@ -2,7 +2,7 @@
 
 # Define variables
 REMOTE_PATH="/etc/nginx/sites-enabled"
-CONFIG_FILE="nginx.conf"
+CONFIG_FILE="help-center-nginx/nginx.conf"
 REPO_URL="git@github.com:shimiljascf/helper-nginx.git"
 CLONE_DIR="$(pwd)"
 
